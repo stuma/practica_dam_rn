@@ -23,38 +23,17 @@ export const screens = {
   listar: 'Listado de Productos',
   detalle: 'Detalle de Producto',
 };
-const API_URL = 'https://api.mercadolibre.com/sites/MLA/search?q=Motorola%20G6';
+export const API_URL =
+  'https://api.mercadolibre.com/sites/MLA/search?q=Motorola%20G6';
 
 const App = () => {
-  const [productos, setProductos] = useState([]);
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setProductos(response.data.results);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
         <StatusBar barStyle="dark-content" />
         <Stack.Navigator>
-          <Stack.Screen
-            name={screens.listar}
-            component={Listar}
-            initialParams={{productos}}
-          />
-          <Stack.Screen
-            name={screens.detalle}
-            component={Detalle}
-            initialParams={{productos}}
-          />
+          <Stack.Screen name={screens.listar} component={Listar} />
+          <Stack.Screen name={screens.detalle} component={Detalle} />
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>
