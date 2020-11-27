@@ -7,12 +7,14 @@
  */
 
 import React from 'react';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {StyleSheet, StatusBar, View, Text, Button} from 'react-native';
+import {StyleSheet, StatusBar} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Listar from './components/listar';
 import Detalle from './components/detalle';
+import * as eva from '@eva-design/eva';
+import {ApplicationProvider} from '@ui-kitten/components';
 
 const Stack = createStackNavigator();
 
@@ -23,13 +25,15 @@ export const screens = {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="dark-content" />
-      <Stack.Navigator>
-        <Stack.Screen name={screens.listar} component={Listar} />
-        <Stack.Screen name={screens.detalle} component={Detalle} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <NavigationContainer>
+        <StatusBar barStyle="dark-content" />
+        <Stack.Navigator>
+          <Stack.Screen name={screens.listar} component={Listar} />
+          <Stack.Screen name={screens.detalle} component={Detalle} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ApplicationProvider>
   );
 };
 
