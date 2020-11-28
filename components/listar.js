@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {View, StyleSheet} from 'react-native';
-import {Button, Text} from '@ui-kitten/components';
+import {View, StyleSheet, ScrollView} from 'react-native';
+import {Text} from '@ui-kitten/components';
 import {API_URL, screens} from '../App';
 import axios from 'axios';
+import Tarjeta from './tarjeta';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,16 +31,20 @@ const Listar = ({...props}) => {
   return (
     <View style={styles.container}>
       <Text>Listar</Text>
-      <Text>{productos.length}</Text>
-      <Button
-        onPress={() =>
-          navigator.navigate(screens.detalle, {
-            itemId: 86,
-            otherParam: 'Otro parámetro que queramos pasar',
-          })
-        }>
-        Ir a segunda pantalla
-      </Button>
+      {productos.length > 0 && (
+        <ScrollView>
+          {productos.map((producto) => (
+            <Tarjeta
+              titulo={producto.title}
+              precio={producto.price}
+              onPressVerDetalles={() => {
+                navigator.navigate(screens.detalle, {producto});
+              }}
+              key={producto.id}
+            />
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 };

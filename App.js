@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {StyleSheet, StatusBar} from 'react-native';
@@ -15,7 +15,6 @@ import Listar from './components/listar';
 import Detalle from './components/detalle';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider} from '@ui-kitten/components';
-import axios from 'axios';
 
 const Stack = createStackNavigator();
 
