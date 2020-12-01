@@ -15,12 +15,16 @@ import Listar from './components/listar';
 import Detalle from './components/detalle';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider} from '@ui-kitten/components';
+import {StoreProvider} from './context/storeContext';
+import {Home} from './components/home';
 
 const Stack = createStackNavigator();
 
 export const screens = {
   listar: 'Listado de Productos',
   detalle: 'Detalle de Producto',
+  homepage: 'Pagina Principal',
+  categorias: 'Categorías',
 };
 export const API_URL =
   'https://api.mercadolibre.com/sites/MLA/search?q=Motorola%20G6';
@@ -28,13 +32,21 @@ export const API_URL =
 const App = () => {
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
-      <NavigationContainer>
-        <StatusBar barStyle="dark-content" />
-        <Stack.Navigator>
-          <Stack.Screen name={screens.listar} component={Listar} />
-          <Stack.Screen name={screens.detalle} component={Detalle} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <StoreProvider>
+        <NavigationContainer>
+          <StatusBar barStyle="dark-content" />
+          <Stack.Navigator>
+            <Stack.Screen
+              initial={true}
+              name={screens.homepage}
+              options={{headerShown: false}}
+              component={Home}
+            />
+            <Stack.Screen name={screens.listar} component={Listar} />
+            <Stack.Screen name={screens.detalle} component={Detalle} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </StoreProvider>
     </ApplicationProvider>
   );
 };

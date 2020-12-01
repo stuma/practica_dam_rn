@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {Text} from '@ui-kitten/components';
-import {API_URL, screens} from '../App';
-import axios from 'axios';
+import {screens} from '../App';
 import Tarjeta from './tarjeta';
+import {StoreContext} from '../context/storeContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,25 +13,12 @@ const styles = StyleSheet.create({
 });
 
 const Listar = ({...props}) => {
-  const [productos, setProductos] = useState([]);
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setProductos(response.data.results);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+  const {productos} = useContext(StoreContext);
   const navigator = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Text>Listar</Text>
-      {productos.length > 0 && (
+      {productos.length > 0 ? (
         <ScrollView>
           {productos.map((producto) => (
             <Tarjeta
@@ -44,6 +31,10 @@ const Listar = ({...props}) => {
             />
           ))}
         </ScrollView>
+      ) : (
+        <Text category="h3" status="info">
+          Cargando productos disponibles...
+        </Text>
       )}
     </View>
   );
