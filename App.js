@@ -17,6 +17,7 @@ import * as eva from '@eva-design/eva';
 import {ApplicationProvider} from '@ui-kitten/components';
 import {StoreProvider} from './context/storeContext';
 import {Home} from './components/home';
+import {ListaCategorias} from './components/listaCategorias';
 
 const Stack = createStackNavigator();
 
@@ -24,10 +25,8 @@ export const screens = {
   listar: 'Listado de Productos',
   detalle: 'Detalle de Producto',
   homepage: 'Pagina Principal',
-  categorias: 'Categorías',
+  listaCategorias: 'Categorias',
 };
-export const API_URL =
-  'https://api.mercadolibre.com/sites/MLA/search?q=Motorola%20G6';
 
 const App = () => {
   return (
@@ -44,6 +43,10 @@ const App = () => {
             />
             <Stack.Screen name={screens.listar} component={Listar} />
             <Stack.Screen name={screens.detalle} component={Detalle} />
+            <Stack.Screen
+              name={screens.listaCategorias}
+              component={ListaCategorias}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </StoreProvider>

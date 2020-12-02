@@ -49,7 +49,7 @@ export const Home = () => {
           style={styles.button}
           appearance="outline"
           status="info"
-          onPress={() => navigator.push(screens.categorias)}>
+          onPress={() => navigator.navigate(screens.listaCategorias)}>
           VER CATEGORÍAS
         </Button>
       </View>
