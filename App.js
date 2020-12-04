@@ -14,10 +14,11 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Listar from './components/listar';
 import Detalle from './components/detalle';
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider} from '@ui-kitten/components';
+import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {StoreProvider} from './context/storeContext';
 import {Home} from './components/home';
 import {ListaCategorias} from './components/listaCategorias';
+import {EvaIconsPack} from "@ui-kitten/eva-icons";
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,7 @@ export const screens = {
 const App = () => {
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
+      <IconRegistry icons={EvaIconsPack} />
       <StoreProvider>
         <NavigationContainer>
           <StatusBar barStyle="dark-content" />
