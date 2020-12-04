@@ -1,40 +1,78 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {
-  View,
-  Button,
-  Image,
-  StyleSheet,
-  Text as TextNative,
-} from 'react-native';
-import {Text} from '@ui-kitten/components';
+import {View, Image, StyleSheet, Text as TextNative} from 'react-native';
+import {Text, Button, Icon} from '@ui-kitten/components';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
+    paddingHorizontal: 10,
   },
   logo: {
     flex: 1,
-    height: 160,
+    height: 240,
   },
   contenedorImgPrecio: {
     flexDirection: 'row',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    borderColor: 'grey',
+    borderWidth: 2,
   },
   infoProducto: {
+    borderLeftColor: 'grey',
+    borderLeftWidth: 2,
     flexDirection: 'column',
     flex: 2,
-    alignItems: 'center',
     justifyContent: 'center',
   },
-  btnVolver: {
+  form: {},
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
+  btnVolver: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  btnGuardar: {
+    flex: 2,
+    marginHorizontal: 5,
+  },
   text: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontWeight: '200',
     fontStyle: 'italic',
-    textAlign: 'center',
+    textAlign: 'left',
+    marginLeft: 10,
+    marginTop: 10,
+  },
+  textPrice: {
+    fontSize: 30,
+    fontWeight: '300',
+    fontStyle: 'italic',
+    textAlign: 'left',
+    marginTop: 'auto',
+    marginLeft: 10,
+  },
+  textPriceDiscount: {
+    fontSize: 20,
+    color: '#00a650',
+  },
+  textEnvio: {
+    fontSize: 18,
+    fontWeight: '200',
+    fontStyle: 'italic',
+    textAlign: 'left',
+    color: '#00a650',
+    marginTop: 5,
+    lineHeight: 32, // Mismo height que el icono para que el texto tenga la base en la misma linea
+  },
+  icon: {
+    width: 32,
+    height: 32,
   },
 });
 
@@ -52,23 +90,44 @@ const Detalle = ({route: {params}, ...props}) => {
           }}
         />
         <View style={styles.infoProducto}>
-          <TextNative style={styles.text}>Precio: {producto.price}</TextNative>
           <TextNative style={styles.text}>
             Estado: {producto.condition}
           </TextNative>
+          <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10}}>
+            <Icon style={styles.icon} fill="#00a650" name="car-outline" />
+            <TextNative style={styles.textEnvio}>
+              Llega gratis el{' '}
+              <TextNative style={{fontWeight: 'bold'}}>Miércoles</TextNative>
+            </TextNative>
+          </View>
           <TextNative style={styles.text}>
-            Forma de pago: {producto.installments.quantity} cuotas de{' '}
+            Forma de pago: {'\n' + producto.installments.quantity} cuotas de{' '}
             {producto.installments.amount}
+          </TextNative>
+          <TextNative style={styles.textPrice}>
+            ${producto.price} <TextNative style={styles.textPriceDiscount}>{100 - producto.installments.rate}% Off</TextNative>
           </TextNative>
         </View>
       </View>
-      <Button
-        title="Volver"
-        style={styles.btnVolver}
-        onPress={() => {
-          navigator.goBack();
-        }}
-      />
+      <View style={styles.form} />
+      <View style={styles.buttons}>
+        <Button
+          appearance="outline"
+          style={styles.btnVolver}
+          onPress={() => {
+            navigator.goBack();
+          }}>
+          VOLVER
+        </Button>
+        <Button
+          status="success"
+          style={styles.btnGuardar}
+          onPress={() => {
+            navigator.goBack();
+          }}>
+          GUARDAR
+        </Button>
+      </View>
     </View>
   );
 };
