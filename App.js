@@ -18,7 +18,7 @@ import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {StoreProvider} from './context/storeContext';
 import {Home} from './components/home';
 import {ListaCategorias} from './components/listaCategorias';
-import {EvaIconsPack} from "@ui-kitten/eva-icons";
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 const Stack = createStackNavigator();
 

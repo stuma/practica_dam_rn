@@ -1,7 +1,16 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, Image, StyleSheet, Text as TextNative} from 'react-native';
-import {Text, Button, Icon} from '@ui-kitten/components';
+import {
+  Text,
+  Button,
+  Icon,
+  SelectItem,
+  SelectGroup,
+  Select,
+  IndexPath,
+} from '@ui-kitten/components';
+import {StoreContext} from '../context/storeContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,10 +88,16 @@ const styles = StyleSheet.create({
 const Detalle = ({route: {params}, ...props}) => {
   const navigator = useNavigation();
   const {producto} = params;
+  const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
+  const {categorias} = useContext(StoreContext);
+
+  const renderOption = ({nombre}) => <SelectItem title={nombre} />;
+
+  console.log('Valor!', categorias[selectedIndex.value]);
   return (
     <View style={styles.container}>
       <Text category="h4">{producto.title}</Text>
-      <View style={styles.contenedorImgPrecio}>
+      <View style={[styles.contenedorImgPrecio, {backgroundColor: 'green'}]}>
         <Image
           style={styles.logo}
           source={{
@@ -105,10 +120,26 @@ const Detalle = ({route: {params}, ...props}) => {
             {producto.installments.amount}
           </TextNative>
           <TextNative style={styles.textPrice}>
-            ${producto.price} <TextNative style={styles.textPriceDiscount}>{100 - producto.installments.rate}% Off</TextNative>
+            ${producto.price}{' '}
+            <TextNative style={styles.textPriceDiscount}>
+              {100 - producto.installments.rate}% Off
+            </TextNative>
           </TextNative>
         </View>
       </View>
+      {/* <SelectGroup title={'Categorias'}>
+        {categorias.map(renderOption)}
+      </SelectGroup> */}
+      <Select
+        style={styles.select}
+        // placeholder="Default"
+        value={categorias[selectedIndex.value]}
+        selectedIndex={selectedIndex}
+        onSelect={(index) => {
+          setSelectedIndex(index);
+        }}>
+        {categorias.map(renderOption)}
+      </Select>
       <View style={styles.form} />
       <View style={styles.buttons}>
         <Button
