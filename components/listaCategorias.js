@@ -129,7 +129,6 @@ const PrimeraPantalla = ({
         style={styles.textInput}
         value={nombreNuevaCategoria}
         onChangeText={(nuevoTexto) => {
-          console.log('mensaje', nuevoTexto);
           setNombreNuevaCategoria(nuevoTexto);
         }}
       />

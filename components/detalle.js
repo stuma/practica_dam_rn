@@ -1,16 +1,11 @@
 import React, {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, Image, StyleSheet, Text as TextNative} from 'react-native';
-import {
-  Text,
-  Button,
-  Icon,
-  SelectItem,
-  SelectGroup,
-  Select,
-  IndexPath,
-} from '@ui-kitten/components';
+import {Text, Button, Icon} from '@ui-kitten/components';
 import {StoreContext} from '../context/storeContext';
+import {FlatList} from 'react-native-gesture-handler';
+import BottomSheetModal from './bottomSheetModal';
+import SeleccionarCategoria from './seleccionarCategoria';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
   },
-  form: {},
+  form: {marginBottom: 30},
   buttons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -45,10 +40,12 @@ const styles = StyleSheet.create({
   btnVolver: {
     flex: 1,
     marginHorizontal: 5,
+    marginTop: 10,
   },
   btnGuardar: {
     flex: 2,
     marginHorizontal: 5,
+    marginTop: 10,
   },
   text: {
     fontSize: 22,
@@ -83,21 +80,34 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
   },
+  chip: {
+    height: 40,
+    justifyContent: 'center',
+    marginTop: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    alignSelf: 'flex-start',
+    marginRight: 5,
+  },
 });
 
 const Detalle = ({route: {params}, ...props}) => {
   const navigator = useNavigation();
   const {producto} = params;
-  const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
-  const {categorias} = useContext(StoreContext);
+  const {obtenerCategoriasDelProducto} = useContext(StoreContext);
+  const categorias = obtenerCategoriasDelProducto(producto);
+  const [categoriasModal, setCategoriasModal] = useState(false);
 
-  const renderOption = ({nombre}) => <SelectItem title={nombre} />;
-
-  console.log('Valor!', categorias[selectedIndex.value]);
   return (
     <View style={styles.container}>
+      <BottomSheetModal
+        visible={categoriasModal}
+        onClosePressed={() => setCategoriasModal(false)}
+        title="Seleccionar Categoria">
+        <SeleccionarCategoria producto={producto} />
+      </BottomSheetModal>
       <Text category="h4">{producto.title}</Text>
-      <View style={[styles.contenedorImgPrecio, {backgroundColor: 'green'}]}>
+      <View style={[styles.contenedorImgPrecio]}>
         <Image
           style={styles.logo}
           source={{
@@ -127,37 +137,43 @@ const Detalle = ({route: {params}, ...props}) => {
           </TextNative>
         </View>
       </View>
-      {/* <SelectGroup title={'Categorias'}>
-        {categorias.map(renderOption)}
-      </SelectGroup> */}
-      <Select
-        style={styles.select}
-        // placeholder="Default"
-        value={categorias[selectedIndex.value]}
-        selectedIndex={selectedIndex}
-        onSelect={(index) => {
-          setSelectedIndex(index);
-        }}>
-        {categorias.map(renderOption)}
-      </Select>
-      <View style={styles.form} />
-      <View style={styles.buttons}>
+      <Text>Categorias:</Text>
+      <FlatList
+        data={categorias}
+        horizontal
+        renderItem={({item}) => (
+          <View style={[styles.chip, {backgroundColor: item.color}]}>
+            <Text>{item.nombre}</Text>
+          </View>
+        )}
+      />
+      <View style={styles.form}>
         <Button
           appearance="outline"
           style={styles.btnVolver}
           onPress={() => {
-            navigator.goBack();
+            setCategoriasModal(true);
           }}>
-          VOLVER
+          MODIFICAR CATEGORIAS
         </Button>
-        <Button
-          status="success"
-          style={styles.btnGuardar}
-          onPress={() => {
-            navigator.goBack();
-          }}>
-          GUARDAR
-        </Button>
+        <View style={styles.buttons}>
+          <Button
+            appearance="outline"
+            style={styles.btnVolver}
+            onPress={() => {
+              navigator.goBack();
+            }}>
+            VOLVER
+          </Button>
+          <Button
+            status="success"
+            style={styles.btnGuardar}
+            onPress={() => {
+              navigator.goBack();
+            }}>
+            GUARDAR
+          </Button>
+        </View>
       </View>
     </View>
   );

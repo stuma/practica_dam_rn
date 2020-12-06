@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
 });
 
 const BottomSheetModal = ({title, visible, onClosePressed, children}) => {
-  console.log(children);
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={styles.modalContainer}>
