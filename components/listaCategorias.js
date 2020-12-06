@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   modalButton: {
     marginVertical: 10,
   },
+  cardText: {textAlign: 'center', fontWeight: 'bold'},
 });
 
 export const ListaCategorias = () => {
@@ -53,6 +54,20 @@ export const ListaCategorias = () => {
   const [colorNuevaCategoria, setColorNuevaCategoria] = useState('red');
   const screenDirection = useOrientation();
 
+  const crearCategoria = () => {
+    setCategorias([
+      ...categorias,
+      {
+        nombre: nombreNuevaCategoria,
+        color: colorNuevaCategoria,
+        id: Math.random(),
+      },
+    ]);
+    setNombreNuevaCategoria('');
+    setColorNuevaCategoria('red');
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <BottomSheetModal
@@ -62,14 +77,11 @@ export const ListaCategorias = () => {
         <>
           {primaraPantalla && (
             <PrimeraPantalla
-              categorias={categorias}
-              setCategorias={setCategorias}
               nombreNuevaCategoria={nombreNuevaCategoria}
               setNombreNuevaCategoria={setNombreNuevaCategoria}
               colorNuevaCategoria={colorNuevaCategoria}
-              setColorNuevaCategoria={setColorNuevaCategoria}
-              setModalVisible={setModalVisible}
               setPrimeraPantalla={setPrimeraPantalla}
+              crearCategoria={crearCategoria}
             />
           )}
           {!primaraPantalla && (
@@ -88,15 +100,13 @@ export const ListaCategorias = () => {
       <FlatList
         data={categorias}
         key={screenDirection}
-        numColumns={screenDirection == SCREEN.LANDSCAPE ? 4 : 2}
+        numColumns={screenDirection === SCREEN.LANDSCAPE ? 4 : 2}
         renderItem={({item}) => {
           return (
             <Card
               style={{...styles.card, backgroundColor: item.color}}
               key={item.id}>
-              <Text style={{textAlign: 'center', fontWeight: 'bold'}}>
-                {item.nombre}
-              </Text>
+              <Text style={styles.cardText}>{item.nombre}</Text>
             </Card>
           );
         }}
@@ -109,11 +119,8 @@ const PrimeraPantalla = ({
   nombreNuevaCategoria,
   setNombreNuevaCategoria,
   colorNuevaCategoria,
-  setColorNuevaCategoria,
-  setCategorias,
-  categorias,
-  setModalVisible,
   setPrimeraPantalla,
+  crearCategoria,
 }) => {
   return (
     <>
@@ -132,28 +139,9 @@ const PrimeraPantalla = ({
           editable={false}
           style={styles.textInput}
           value={colorNuevaCategoria}
-          onChangeText={(nuevoTexto) => {
-            console.log('mensaje', nuevoTexto);
-            setColorNuevaCategoria(nuevoTexto);
-          }}
         />
       </TouchableOpacity>
-
-      <Button
-        style={styles.modalButton}
-        onPress={() => {
-          setCategorias([
-            ...categorias,
-            {
-              nombre: nombreNuevaCategoria,
-              color: colorNuevaCategoria,
-              id: Math.random(),
-            },
-          ]);
-          setNombreNuevaCategoria('');
-          setColorNuevaCategoria('red');
-          setModalVisible(false);
-        }}>
+      <Button style={styles.modalButton} onPress={() => crearCategoria()}>
         Crear Categoria
       </Button>
     </>
@@ -169,7 +157,7 @@ const SegundaPantalla = ({setColorNuevaCategoria, setPrimeraPantalla}) => {
           setColorNuevaCategoria(color);
         }}
         hideSliders={true}
-        style={{flex: 1}}
+        style={styles.container}
       />
       <Button
         style={styles.modalButton}
