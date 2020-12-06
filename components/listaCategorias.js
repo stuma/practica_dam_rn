@@ -1,17 +1,11 @@
 import React, {useContext, useState} from 'react';
 import {Button, Card, Icon, Text} from '@ui-kitten/components';
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  useWindowDimensions,
-  Modal,
-  TextInput,
-} from 'react-native';
+import {StyleSheet, View, FlatList, TextInput} from 'react-native';
 import {StoreContext} from '../context/storeContext';
 import {ColorPicker} from 'react-native-color-picker';
 import useOrientation, {SCREEN} from '../hooks/useOrientation';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import BottomSheetModal from './bottomSheetModal';
 
 const styles = StyleSheet.create({
   container: {flex: 1},
@@ -58,40 +52,34 @@ export const ListaCategorias = () => {
   const [nombreNuevaCategoria, setNombreNuevaCategoria] = useState('');
   const [colorNuevaCategoria, setColorNuevaCategoria] = useState('red');
   const screenDirection = useOrientation();
-  // const {width} = useWindowDimensions();
-  // console.log(width);
 
   return (
     <View style={styles.container}>
-      <Modal visible={modalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalView}>
-            {primaraPantalla && (
-              <PrimeraPantalla
-                categorias={categorias}
-                setCategorias={setCategorias}
-                nombreNuevaCategoria={nombreNuevaCategoria}
-                setNombreNuevaCategoria={setNombreNuevaCategoria}
-                colorNuevaCategoria={colorNuevaCategoria}
-                setColorNuevaCategoria={setColorNuevaCategoria}
-                setModalVisible={setModalVisible}
-                setPrimeraPantalla={setPrimeraPantalla}
-              />
-            )}
-            {!primaraPantalla && (
-              <SegundaPantalla
-                setPrimeraPantalla={setPrimeraPantalla}
-                setColorNuevaCategoria={setColorNuevaCategoria}
-              />
-            )}
-            <Button
-              style={styles.modalButton}
-              onPress={() => setModalVisible(false)}>
-              Cerrar
-            </Button>
-          </View>
-        </View>
-      </Modal>
+      <BottomSheetModal
+        visible={modalVisible}
+        onClosePressed={() => setModalVisible(false)}
+        title={primaraPantalla ? 'Crear una categoria' : 'Elegir Color'}>
+        <>
+          {primaraPantalla && (
+            <PrimeraPantalla
+              categorias={categorias}
+              setCategorias={setCategorias}
+              nombreNuevaCategoria={nombreNuevaCategoria}
+              setNombreNuevaCategoria={setNombreNuevaCategoria}
+              colorNuevaCategoria={colorNuevaCategoria}
+              setColorNuevaCategoria={setColorNuevaCategoria}
+              setModalVisible={setModalVisible}
+              setPrimeraPantalla={setPrimeraPantalla}
+            />
+          )}
+          {!primaraPantalla && (
+            <SegundaPantalla
+              setPrimeraPantalla={setPrimeraPantalla}
+              setColorNuevaCategoria={setColorNuevaCategoria}
+            />
+          )}
+        </>
+      </BottomSheetModal>
       <Button
         style={styles.button}
         accessoryLeft={PlusIcon}
@@ -129,7 +117,6 @@ const PrimeraPantalla = ({
 }) => {
   return (
     <>
-      <Text category="h2">Crear una categoria</Text>
       <TextInput
         placeholder="Nombre de Categoria"
         style={styles.textInput}
@@ -176,7 +163,6 @@ const PrimeraPantalla = ({
 const SegundaPantalla = ({setColorNuevaCategoria, setPrimeraPantalla}) => {
   return (
     <>
-      <Text category="h2">Elegir Color</Text>
       <ColorPicker
         onColorSelected={(color) => {
           setPrimeraPantalla(true);
