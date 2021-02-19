@@ -14,6 +14,9 @@ export const StoreProvider = ({children}) => {
     {nombre: 'Categoria 3', color: 'green', id: Math.random().toString(10)},
     {nombre: 'Categoria 4', color: 'yellow', id: Math.random().toString(10)},
   ]);
+  const [compradores, setCompradores] = useState([
+    {nombre: 'Comprador 1', email: '1@comprador.com'}
+  ]);
   const [categoriasProductos, setCategoriasProductos] = useState({});
 
   const fetchData = async () => {
@@ -82,6 +85,8 @@ export const StoreProvider = ({children}) => {
         agregarProductoACategoria,
         quitarProductoDeCategoria,
         obtenerCategoriasDelProducto,
+        compradores, 
+        setCompradores,
       }}>
       {children}
     </StoreContext.Provider>
