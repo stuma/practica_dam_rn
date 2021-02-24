@@ -6,6 +6,7 @@ import {StoreContext} from '../context/storeContext';
 import {FlatList} from 'react-native-gesture-handler';
 import BottomSheetModal from './bottomSheetModal';
 import SeleccionarCategoria from './seleccionarCategoria';
+import SeleccionarComprador from './seleccionarComprador';
 
 const styles = StyleSheet.create({
   container: {
@@ -97,6 +98,9 @@ const Detalle = ({route: {params}, ...props}) => {
   const {obtenerCategoriasDelProducto} = useContext(StoreContext);
   const categorias = obtenerCategoriasDelProducto(producto);
   const [categoriasModal, setCategoriasModal] = useState(false);
+  const {obtenerCompradoresDelProducto} = useContext(StoreContext);
+  const compradores = obtenerCompradoresDelProducto(producto);
+  const [compradoresModal, setCompradoresModal] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -105,6 +109,12 @@ const Detalle = ({route: {params}, ...props}) => {
         onClosePressed={() => setCategoriasModal(false)}
         title="Seleccionar Categoria">
         <SeleccionarCategoria producto={producto} />
+      </BottomSheetModal>
+      <BottomSheetModal
+        visible={compradoresModal}
+        onClosePressed={() => setCompradoresModal(false)}
+        title="Selecionar Comprador">
+        <SeleccionarComprador producto={producto} />
       </BottomSheetModal>
       <Text category="h4">{producto.title}</Text>
       <View style={[styles.contenedorImgPrecio]}>
@@ -147,6 +157,16 @@ const Detalle = ({route: {params}, ...props}) => {
           </View>
         )}
       />
+      <Text>Compradores:</Text>
+      <FlatList
+        data={compradores}
+        horizontal
+        renderItem={({item}) => (
+          <View style={[styles.chip, {backgroundColor: 'grey'}]}>
+            <Text>{item.nombre}</Text>
+          </View>
+        )}
+      />
       <View style={styles.form}>
         <Button
           appearance="outline"
@@ -155,6 +175,14 @@ const Detalle = ({route: {params}, ...props}) => {
             setCategoriasModal(true);
           }}>
           MODIFICAR CATEGORIAS
+        </Button>
+        <Button
+          appearance="outline"
+          style={styles.btnVolver}
+          onPress={() => {
+            setCompradoresModal(true);
+          }}>
+          MODIFICAR COMPRADORES
         </Button>
         <View style={styles.buttons}>
           <Button

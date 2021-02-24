@@ -15,9 +15,10 @@ export const StoreProvider = ({children}) => {
     {nombre: 'Categoria 4', color: 'yellow', id: Math.random().toString(10)},
   ]);
   const [compradores, setCompradores] = useState([
-    {nombre: 'Comprador 1', email: '1@comprador.com'}
+    {nombre: 'Comprador 1', email: '1@comprador.com', id: Math.random().toString(10)}
   ]);
   const [categoriasProductos, setCategoriasProductos] = useState({});
+  const [compradoresProductos, setCompradoresProductos] = useState({});
 
   const fetchData = async () => {
     try {
@@ -44,6 +45,21 @@ export const StoreProvider = ({children}) => {
     }
   };
 
+  const agregarCompradorAProducto = (comprador, producto) => {
+    if (!comprador?.id || !producto?.id) {
+      return;
+    }
+
+    const compradoresProductos = compradoresProductos[comprador.id] ?? [];
+    if (!compradoresProductos.includes(producto.id)) {
+      const newCompradoresProductos = {
+        ...compradoresProductos,
+        [producto.id]: [...compradoresProductos, producto.id],
+      };
+      setCompradoresProductos(newCompradoresProductos);
+    }
+  };
+
   const quitarProductoDeCategoria = (categoria, producto) => {
     if (!categoria?.id || !producto?.id) {
       return; // No hay id de categoria o producto
@@ -58,6 +74,20 @@ export const StoreProvider = ({children}) => {
     }
   };
 
+  const quitarProductoDeComprador = (comprador, producto) => {
+    if (!comprador?.id || !producto?.id) {
+      return; // No hay id de categoria o producto
+    }
+    const compradorProducto = compradoresProductos[comprador.id] ?? [];
+    if (compradorProducto.includes(producto.id)) {
+      //Si esta lo quitamos
+      setCategoriasProductos({
+        ...compradoresProductos,
+        [comprador.id]: compradorProducto.filter((pid) => pid !== producto.id),
+      });
+    }
+  };
+
   const obtenerCategoriasDelProducto = (producto) => {
     const categoriasId = Object.keys(categoriasProductos);
     const categoriasIdDelProducto = categoriasId.reduce(
@@ -67,6 +97,19 @@ export const StoreProvider = ({children}) => {
     );
     const results = categorias.filter((c) =>
       categoriasIdDelProducto.includes(c.id),
+    );
+    return results;
+  };
+
+  const obtenerCompradoresDelProducto = (producto) => {
+    const compradoresId = Object.keys(compradoresProductos);
+    const compradoresIdDelProducto = compradoresId.reduce(
+      (acc, cur) =>
+        compradoresProductos[cur].includes(producto.id) ? [...acc, cur] : acc,
+      [],
+    );
+    const results = productos.filter((c) =>
+    compradoresIdDelProducto.includes(c.id),
     );
     return results;
   };
@@ -87,6 +130,9 @@ export const StoreProvider = ({children}) => {
         obtenerCategoriasDelProducto,
         compradores, 
         setCompradores,
+        agregarCompradorAProducto,
+        quitarProductoDeComprador,
+        obtenerCompradoresDelProducto
       }}>
       {children}
     </StoreContext.Provider>

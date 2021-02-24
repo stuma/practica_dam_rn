@@ -60,6 +60,7 @@ export const ListaCompradores = () => {
       {
         nombre: nombreComprador,
         email: emailComprador,
+        id: Math.random(),
       },
     ]);
     setNombreComprador('');
@@ -74,13 +75,15 @@ export const ListaCompradores = () => {
         onClosePressed={() => setModalVisible(false)}
         title='Alta de Comprador'>
         <>
+        {primeraPantalla && (
           <PrimeraPantalla
             nombreComprador={nombreComprador}
             setNombreComprador={setNombreComprador}
             emailComprador={emailComprador}
             setEmailComprador={setEmailComprador}
             altaComprador={altaComprador}
-          />
+            setPrimeraPantalla={setPrimeraPantalla}
+          />)}
         </>
       </BottomSheetModal>
       <Button
@@ -96,7 +99,7 @@ export const ListaCompradores = () => {
           return (
             <Card
               style={{...styles.card}}
-              key={item.nombre}>
+              key={item.id}>
               <Text style={styles.cardText}>{item.nombre}</Text>
             </Card>
           );
@@ -119,9 +122,9 @@ const PrimeraPantalla = ({
         placeholder="Nombre del Comprador"
         style={styles.textInput}
         value={nombreComprador}
-        // onChangeText={(nuevoTexto) => {
-        //   setNombreComprador(nuevoTexto);
-        // }}
+        onChangeText={(nuevoTexto) => {
+          setNombreComprador(nuevoTexto);
+        }}
       />
       <TextInput
         placeholder="Email del Comprador"
