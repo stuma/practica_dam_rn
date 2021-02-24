@@ -50,6 +50,7 @@ export const StoreProvider = ({children}) => {
       return;
     }
 
+    console.log(compradoresProductos);
     const compradoresProductos = compradoresProductos[comprador.id] ?? [];
     if (!compradoresProductos.includes(producto.id)) {
       const newCompradoresProductos = {
