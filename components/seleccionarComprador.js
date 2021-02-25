@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   chip: {width: 30, height: 10, borderRadius: 10},
   list: {backgroundColor: 'transparent', marginTop: 10},
   item: {paddingVertical: 20},
+  textRender: {color: 'black'}
 });
 
 const SeleccionarComprador = ({producto}) => {
@@ -23,14 +24,9 @@ const SeleccionarComprador = ({producto}) => {
 
     const renderColor = () => {
       return (
-        <View
-          style={[
-            styles.chip,
-            {
-              backgroundColor: 'lightgrey',
-            },
-          ]}
-        />
+        <View>
+          <Text style={[styles.textRender]}>{item.nombre}</Text>
+        </View>
       );
     };
 

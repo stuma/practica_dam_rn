@@ -49,13 +49,11 @@ export const StoreProvider = ({children}) => {
     if (!comprador?.id || !producto?.id) {
       return;
     }
-
-    console.log(compradoresProductos);
-    const compradoresProductos = compradoresProductos[comprador.id] ?? [];
-    if (!compradoresProductos.includes(producto.id)) {
+    const compradorProductos = compradoresProductos[comprador.id] ?? [];
+    if (!compradorProductos.includes(producto.id)) {
       const newCompradoresProductos = {
         ...compradoresProductos,
-        [producto.id]: [...compradoresProductos, producto.id],
+        [comprador.id]: [...compradorProductos, producto.id],
       };
       setCompradoresProductos(newCompradoresProductos);
     }
@@ -109,7 +107,7 @@ export const StoreProvider = ({children}) => {
         compradoresProductos[cur].includes(producto.id) ? [...acc, cur] : acc,
       [],
     );
-    const results = productos.filter((c) =>
+    const results = compradores.filter((c) =>
     compradoresIdDelProducto.includes(c.id),
     );
     return results;
